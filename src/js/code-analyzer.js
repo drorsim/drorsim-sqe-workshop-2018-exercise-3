@@ -302,13 +302,13 @@ function isSquare(str){
     if(!str.includes('->')){
         return isSquareS(str);
     }
-    else return isSquare2;
+    else return isSquare2(str);
 }
 function isSquareS(str){
     if(str.includes('<') || str.includes('>') || str.includes('==') || str.includes('!=')){
         return 'd';
     }
-    else return isSquare2;
+    else return isSquare2(str);
 }
 
 function isSquare2(str) {

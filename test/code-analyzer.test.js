@@ -311,15 +311,15 @@ describe('The javascript parser', () => {
                 '    return c;\n' +
                 '}\n'),parseCode('let x = 1, y=2,z=3;'))),
             'digraph{n0 [label="entry", style="rounded", color = "green"]\n' +
-            'n1 [label="let a = x + 1;", color = "green"]\n' +
-            'n2 [label="let b = a + y;", color = "green"]\n' +
-            'n3 [label="let c = 0;", color = "green"]\n' +
+            'n1 [label="let a = x + 1;", shape = "square", color = "green"]\n' +
+            'n2 [label="let b = a + y;", shape = "square", color = "green"]\n' +
+            'n3 [label="let c = 0;", shape = "square", color = "green"]\n' +
             'n4 [label="b < z", shape = "diamond", color = "green"]\n' +
-            'n5 [label="c = c + 5"]\n' +
-            'n6 [label="return c;", color = "green"]\n' +
+            'n5 [label="c = c + 5", shape = "square"]\n' +
+            'n6 [label="return c;", shape = "square", color = "green"]\n' +
             'n7 [label="b < z * 2", shape = "diamond", color = "green"]\n' +
-            'n8 [label="c = c + x + 5", color = "green"]\n' +
-            'n9 [label="c = c + z + 5"]\n' +
+            'n8 [label="c = c + x + 5", shape = "square", color = "green"]\n' +
+            'n9 [label="c = c + z + 5", shape = "square"]\n' +
             'n10 [label="exit", style="rounded", color = "green"]\n' +
             'n0 -> n1 []\n' +
             'n1 -> n2 []\n' +
@@ -381,14 +381,14 @@ describe('The javascript parser', () => {
                 '   return z;\n' +
                 '}\n'),parseCode('let x = 1, y=2,z=3;'))),
             'digraph{n0 [label="entry", style="rounded", color = "green"]\n' +
-            'n1 [label="let a = x + 1;", color = "green"]\n' +
-            'n2 [label="let b = a + y;", color = "green"]\n' +
-            'n3 [label="let c = 0;", color = "green"]\n' +
+            'n1 [label="let a = x + 1;", shape = "square", color = "green"]\n' +
+            'n2 [label="let b = a + y;", shape = "square", color = "green"]\n' +
+            'n3 [label="let c = 0;", shape = "square", color = "green"]\n' +
             'n4 [label="a < z", shape = "diamond", color = "green"]\n' +
-            'n5 [label="c = a + b", color = "green"]\n' +
-            'n6 [label="z = c * 2", color = "green"]\n' +
-            'n7 [label="a++", color = "green"]\n' +
-            'n8 [label="return z;", color = "green"]\n' +
+            'n5 [label="c = a + b", shape = "square", color = "green"]\n' +
+            'n6 [label="z = c * 2", shape = "square", color = "green"]\n' +
+            'n7 [label="a++", shape = "square", color = "green"]\n' +
+            'n8 [label="return z;", shape = "square", color = "green"]\n' +
             'n9 [label="exit", style="rounded", color = "green"]\n' +
             'n0 -> n1 []\n' +
             'n1 -> n2 []\n' +
@@ -402,6 +402,72 @@ describe('The javascript parser', () => {
             'n8 -> n9 []\n' +
             '}\n' +
             '\n' +
+            '\n' +
+            ''
+        );
+    });
+
+    it('testDrawWhile2', () => {
+        assert.equal(
+            DrawAllG('digraph{n0 [label="entry", style="rounded"]\n' +
+                'n1 [label="let a = x + 1;"]\n' +
+                'n2 [label="let b = a + y;"]\n' +
+                'n3 [label="let c = 0;"]\n' +
+                'n4 [label="a < z"]\n' +
+                'n5 [label="c = a + b"]\n' +
+                'n6 [label="z = c * 2"]\n' +
+                'n7 [label="a++"]\n' +
+                'n8 [label="return z;"]\n' +
+                'n9 [label="exit", style="rounded"]\n' +
+                'n0 -> n1 []\n' +
+                'n1 -> n2 []\n' +
+                'n1 -> n9 [color="red", label="exception"]\n' +
+                'n2 -> n3 []\n' +
+                'n2 -> n9 [color="red", label="exception"]\n' +
+                'n3 -> n4 []\n' +
+                'n4 -> n5 [label="true"]\n' +
+                'n4 -> n8 [label="false"]\n' +
+                'n4 -> n9 [color="red", label="exception"]\n' +
+                'n5 -> n6 []\n' +
+                'n5 -> n9 [color="red", label="exception"]\n' +
+                'n6 -> n7 []\n' +
+                'n6 -> n9 [color="red", label="exception"]\n' +
+                'n7 -> n4 []\n' +
+                'n8 -> n9 []\n' +
+                '}',parseCode(''),mainfunc(parseCode('function foo(x, y, z){\n' +
+                '   let a = x + 1;\n' +
+                '   let b = a + y;\n' +
+                '   let c = 0;\n' +
+                '   \n' +
+                '   while (a < z) {\n' +
+                '       c = a + b;\n' +
+                '       z = c * 2;\n' +
+                '       a++;\n' +
+                '   }\n' +
+                '   \n' +
+                '   return z;\n' +
+                '}\n'),parseCode(''))),
+            'digraph{n0 [label="entry", style="rounded"]\n' +
+            'n1 [label="let a = x + 1;", shape = "square"]\n' +
+            'n2 [label="let b = a + y;", shape = "square"]\n' +
+            'n3 [label="let c = 0;", shape = "square"]\n' +
+            'n4 [label="a < z", shape = "diamond"]\n' +
+            'n5 [label="c = a + b", shape = "square"]\n' +
+            'n6 [label="z = c * 2", shape = "square"]\n' +
+            'n7 [label="a++", shape = "square"]\n' +
+            'n8 [label="return z;", shape = "square"]\n' +
+            'n9 [label="exit", style="rounded"]\n' +
+            'n0 -> n1 []\n' +
+            'n1 -> n2 []\n' +
+            'n2 -> n3 []\n' +
+            'n3 -> n4 []\n' +
+            'n4 -> n5 [label="true"]\n' +
+            'n4 -> n8 [label="false"]\n' +
+            'n5 -> n6 []\n' +
+            'n6 -> n7 []\n' +
+            'n7 -> n4 []\n' +
+            'n8 -> n9 []\n' +
+            '}\n' +
             '\n' +
             ''
         );
